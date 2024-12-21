@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>金錢管理與結算系統</title>
+  <style>
+    /* CSS 部分 */
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    #payment-section, #summary-section {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      width: 300px;
+    }
+
+    .record {
+      margin: 10px 0;
+    }
+  </style>
+</head>
+<body>
+  <!-- HTML 部分 -->
+  <h1>金錢管理系統</h1>
+  
+  <div id="payment-section">
+    <h2>添加付款記錄</h2>
+    <input type="text" id="username" placeholder="使用者名稱">
+    <input type="number" id="amount" placeholder="金額" min="0">
+    <button onclick="addPayment()">添加記錄</button>
+    <p id="error-msg" style="color: red;"></p>
+  </div>
+
+  <div id="summary-section">
+    <h2>付款記錄</h2>
+    <div id="records"></div>
+    <p id="total">總金額: $0</p>
+    <button onclick="finalize()">一次結算</button>
+  </div>
+
+  <script>
+    // JavaScript 部分
+    let payments = [];
+    let totalAmount = 0;
+
+    function addPayment() {
+      const username = document.getElementById('username').value;
+      const amount = parseFloat(document.getElementById('amount').value);
+      const errorMsg = document.getElementById('error-msg');
+
+      if (!username || isNaN(amount) || amount <= 0) {
+        errorMsg.textContent = "請輸入有效的名稱和金額！";
+        return;
+      }
+
+      errorMsg.textContent = "";
+      payments.push({ username, amount });
+      totalAmount += amount;
+
+      document.getElementById('records').innerHTML += 
+        `<div class="record">${username}：$${amount.toFixed(2)}</div>`;
+      document.getElementById('total').textContent = `總金額: $${totalAmount.toFixed(2)}`;
+
+      document.getElementById('username').value = "";
+      document.getElementById('amount').value = "";
+    }
+
+    function finalize() {
+      if (totalAmount === 0) {
+        alert("沒有任何付款記錄！");
+        return;
+      }
+
+      alert(`結算完成！總金額為 $${totalAmount.toFixed(2)}`);
+      payments = [];
+      totalAmount = 0;
+
+      document.getElementById('records').innerHTML = "";
+      document.getElementById('total').textContent = "總金額: $0";
+    }
+  </script>
+</body>
+</html>
